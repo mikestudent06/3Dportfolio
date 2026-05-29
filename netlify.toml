@@ -1,0 +1,12 @@
+[build]
+  command = "pnpm build"
+  publish = ".next"
+
+# Netlify Next.js plugin - enables image optimization and server-side features
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # Enable Next.js image optimization
+  NEXT_PRIVATE_STANDALONE = "true"
