@@ -84,6 +84,10 @@ section {
     @apply relative z-10 xl:mt-20 mt-32 md:h-dvh h-[80vh] flex xl:items-center items-start justify-center;
   }
 
+  .hero-layout--compact {
+    @apply h-auto min-h-0 pb-16 md:h-dvh;
+  }
+
   .hero-text {
     @apply flex flex-col justify-center md:text-[60px] text-[30px] font-semibold relative z-10 pointer-events-none;
     img {

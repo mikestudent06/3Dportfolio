@@ -39,15 +39,11 @@ function PageHeroCanvas() {
 export default function PageHeroScene() {
   const enabled = use3DEnabled();
 
+  if (!enabled) return null;
+
   return (
     <div className="page-hero-scene card-border rounded-2xl overflow-hidden min-h-[220px] md:min-h-[280px] lg:min-h-full">
-      {enabled ? (
-        <PageHeroCanvas />
-      ) : (
-        <div className="flex-center h-full min-h-[220px] bg-black-100">
-          <div className="size-24 rounded-full border border-white/10 bg-white/5 blur-sm" />
-        </div>
-      )}
+      <PageHeroCanvas />
     </div>
   );
 }

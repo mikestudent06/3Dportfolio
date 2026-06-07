@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import TitleHeader from "@/components/ui/TitleHeader";
 import { CanvasLoader } from "@/components/canvas/CanvasLoader";
 import { Scene3DWrapper } from "@/components/three/Scene3DWrapper";
+import { use3DEnabled } from "@/hooks/use3DEnabled";
 import { techStackIcons } from "@/lib/site3d";
 import Link from "next/link";
 import { texts } from "@/lib/constants";
@@ -16,6 +17,8 @@ const TechIconCardExperience = dynamic(
 );
 
 const TechStack3D = () => {
+  const enabled3D = use3DEnabled();
+
   useGSAP(() => {
     gsap.fromTo(
       ".tech-card",
@@ -43,13 +46,12 @@ const TechStack3D = () => {
             >
               <div className="tech-card-animated-bg" />
               <div className="tech-card-content">
-                <div className="tech-icon-wrapper h-60">
-                  <Scene3DWrapper
-                    component={() => <TechIconCardExperience model={model} />}
-                    fallbackClassName="h-60"
-                  />
-                </div>
-                <div className="padding-x w-full">
+                {enabled3D && (
+                  <div className="tech-icon-wrapper h-60">
+                    <Scene3DWrapper component={() => <TechIconCardExperience model={model} />} />
+                  </div>
+                )}
+                <div className={`padding-x w-full${enabled3D ? "" : " py-8"}`}>
                   <p>{model.name}</p>
                 </div>
               </div>

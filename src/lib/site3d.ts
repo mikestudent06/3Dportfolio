@@ -6,11 +6,11 @@ export const heroWords = [
   { text: "Idées", imgPath: "/images/ideas.svg" },
   { text: "Apps", imgPath: "/images/concepts.svg" },
   { text: "Design", imgPath: "/images/designs.svg" },
-  { text: "Code", imgPath: "/images/code.svg" },
+  { text: "Codebases", imgPath: "/images/code.svg" },
   { text: "Idées", imgPath: "/images/ideas.svg" },
   { text: "Apps", imgPath: "/images/concepts.svg" },
   { text: "Design", imgPath: "/images/designs.svg" },
-  { text: "Code", imgPath: "/images/code.svg" },
+  { text: "Codebases", imgPath: "/images/code.svg" },
 ];
 
 export const counterItems = [

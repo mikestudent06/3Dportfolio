@@ -10,6 +10,7 @@ import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import { SocialLinks } from "@/components/ui/SocialLinks";
 import { Scene3DWrapper } from "@/components/three/Scene3DWrapper";
 import { CanvasLoader } from "@/components/canvas/CanvasLoader";
+import { use3DEnabled } from "@/hooks/use3DEnabled";
 import { heroWords } from "@/lib/site3d";
 import { personalInfo, texts } from "@/lib/constants";
 
@@ -20,6 +21,7 @@ const HeroExperience = dynamic(() => import("@/components/three/hero/HeroExperie
 
 const Hero3D = () => {
   const heroRef = useRef<HTMLElement>(null);
+  const enabled3D = use3DEnabled();
 
   useGSAP(
     () => {
@@ -32,10 +34,13 @@ const Hero3D = () => {
         )
         .from(".hero-tagline", { y: 30, opacity: 0, duration: 0.7 }, "-=0.5")
         .from(".hero-actions", { y: 30, opacity: 0, duration: 0.7 }, "-=0.4")
-        .from(".hero-socials", { y: 20, opacity: 0, duration: 0.6 }, "-=0.3")
-        .from(".hero-3d-layout", { x: 80, opacity: 0, duration: 1.2 }, "-=0.8");
+        .from(".hero-socials", { y: 20, opacity: 0, duration: 0.6 }, "-=0.3");
+
+      if (enabled3D) {
+        tl.from(".hero-3d-layout", { x: 80, opacity: 0, duration: 1.2 }, "-=0.8");
+      }
     },
-    { scope: heroRef }
+    { scope: heroRef, dependencies: [enabled3D] }
   );
 
   return (
@@ -44,7 +49,7 @@ const Hero3D = () => {
         <Image src="/images/bg.png" alt="" width={1920} height={1080} className="opacity-80" priority />
       </div>
 
-      <div className="hero-layout">
+      <div className={`hero-layout${enabled3D ? "" : " hero-layout--compact"}`}>
         <header className="flex flex-col justify-center md:w-full w-screen md:px-20 px-5">
           <div className="flex flex-col gap-7">
             <p className="hero-badge w-fit">{texts.hero.badge}</p>
@@ -90,9 +95,11 @@ const Hero3D = () => {
           </div>
         </header>
 
-        <figure className="hero-3d-layout">
-          <Scene3DWrapper component={HeroExperience} />
-        </figure>
+        {enabled3D && (
+          <figure className="hero-3d-layout">
+            <Scene3DWrapper component={HeroExperience} />
+          </figure>
+        )}
       </div>
 
       <AnimatedCounter />

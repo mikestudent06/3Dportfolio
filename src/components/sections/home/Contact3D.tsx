@@ -9,6 +9,7 @@ import { Mail, Phone, MapPin, CheckCircle, AlertCircle } from "lucide-react";
 import TitleHeader from "@/components/ui/TitleHeader";
 import { CanvasLoader } from "@/components/canvas/CanvasLoader";
 import { Scene3DWrapper } from "@/components/three/Scene3DWrapper";
+import { use3DEnabled } from "@/hooks/use3DEnabled";
 import { contact, texts } from "@/lib/constants";
 
 const ContactExperience = dynamic(() => import("@/components/three/contact/ContactExperience"), {
@@ -39,6 +40,7 @@ const contactInfo = [
 
 const Contact3D = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const enabled3D = use3DEnabled();
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -52,13 +54,15 @@ const Contact3D = () => {
         ease: "power3.out",
         scrollTrigger: { trigger: "#contact", start: "top 75%" },
       });
-      gsap.from("[data-contact-scene]", {
-        x: 50,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: "#contact", start: "top 75%" },
-      });
+      if (enabled3D) {
+        gsap.from("[data-contact-scene]", {
+          x: 50,
+          opacity: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: { trigger: "#contact", start: "top 75%" },
+        });
+      }
       gsap.from("[data-contact-info]", {
         y: 30,
         opacity: 0,
@@ -68,7 +72,7 @@ const Contact3D = () => {
         scrollTrigger: { trigger: "[data-contact-info]", start: "top 90%" },
       });
     },
-    { scope: sectionRef }
+    { scope: sectionRef, dependencies: [enabled3D] }
   );
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -130,7 +134,7 @@ const Contact3D = () => {
         </div>
 
         <div className="grid-12-cols mt-16 gap-8">
-          <div className="xl:col-span-5" data-contact-form>
+          <div className={enabled3D ? "xl:col-span-5" : "xl:col-span-12 xl:max-w-2xl"} data-contact-form>
             <div className="card-border rounded-xl p-8 md:p-10 h-full">
               <form onSubmit={handleSubmit} className="contact-form w-full flex flex-col gap-6">
                 <div>
@@ -200,13 +204,15 @@ const Contact3D = () => {
             </div>
           </div>
 
-          <div className="xl:col-span-7 flex flex-col gap-6">
-            <div
-              data-contact-scene
-              className="card-border rounded-3xl overflow-hidden min-h-80 lg:min-h-96 bg-black-100 hover:cursor-grab"
-            >
-              <Scene3DWrapper component={ContactExperience} fallbackClassName="min-h-80 lg:min-h-96 rounded-3xl" />
-            </div>
+          <div className={`${enabled3D ? "xl:col-span-7" : "xl:col-span-12"} flex flex-col gap-6`}>
+            {enabled3D && (
+              <div
+                data-contact-scene
+                className="card-border rounded-3xl overflow-hidden min-h-80 lg:min-h-96 bg-black-100 hover:cursor-grab"
+              >
+                <Scene3DWrapper component={ContactExperience} />
+              </div>
+            )}
 
             <div className="grid sm:grid-cols-3 gap-4" data-contact-info>
               {contactInfo.map((item) => (
